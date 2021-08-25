@@ -1,8 +1,31 @@
+server:
+  port: 8000
+  servlet:
+    context-path: /blog  
+    
 spring:
+  mvc:
+    view:
+      prefix: /WEB-INF/views/
+      suffix: .jsp
+      
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/blog?serverTimezone=Asia/Seoul
     username: cos
     password: thdgorhkd1!
-  
-  
+    
+  jpa:
+    open-in-view: true
+    hibernate:
+      ddl-auto: create
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+      use-new-id-generator-mappings: false #jpa 기본전략 안 따라
+    show-sql: true
+    properties:
+      hibernate.format_sql: true #보기 좋게 정렬
+
+  jackson:
+    serialization:
+      fail-on-empty-beans: false 
