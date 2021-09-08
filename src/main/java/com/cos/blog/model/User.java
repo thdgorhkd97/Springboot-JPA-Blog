@@ -5,6 +5,8 @@ import java. sql.Timestamp;
 import javax.annotation.Generated;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -12,6 +14,7 @@ import javax.print.event.PrintJobAttributeEvent;
 
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.DynamicInsert;
 
 import com.sun.istack.NotNull;
 
@@ -28,6 +31,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Entity //User클래스가 MySQL에 테이블이 생성되게 하는
+//@DynamicInsert -> insert 할 때null인 필드 제외
 public class User {
 
 	@Id //Primary key
@@ -35,7 +39,7 @@ public class User {
 	// Oracle = 시퀀스 , MySQL = Auto_Increasement
 	private int id;
 	
-	@Column(nullable = false, length = 30)
+	@Column(nullable = false, length = 30,unique=true)
 	private String username; //아이디
 	
 	@Column(nullable = false, length = 100) //암호화 할거니까 넉넉히
@@ -44,8 +48,10 @@ public class User {
 	@Column(nullable = false, length = 50)
 	private String email;
 	  
-	@ColumnDefault("'user'")
-	private String role; // admin, user, manager 등등
+	//@ColumnDefault("user")
+	// DB는 RoleType이라는 게 없다
+	@Enumerated(EnumType.STRING)
+	private RoleType role; // admin, user, manager 등등
 									  // Enum으로 도메인 설정하는 게 더 좋다.
 	
 	@CreationTimestamp //시간이 자동입력
